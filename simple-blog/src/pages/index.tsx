@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  const { data, error, isLoading } = trpc.useQuery(["hello"]);
+  const { data, error, isLoading } = trpc.useMutation(["users.register-user"]);
   if (isLoading) {
     return <p>Loading ...</p>;
   } else if (error) {
