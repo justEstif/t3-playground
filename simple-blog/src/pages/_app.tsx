@@ -1,4 +1,3 @@
-// src/pages/_app.tsx
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
@@ -26,7 +25,7 @@ export default withTRPC<AppRouter>({
       links: [
         loggerLink({
           enabled: (opts) =>
-            process.env.NODE_ENV === "development" ||
+            process.env.NODE_ENV === "development" || // enabled if dev
             (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
@@ -45,11 +44,10 @@ export default withTRPC<AppRouter>({
       // set the headers
       headers: () => {
         if (ctx?.req) {
-          // add our headers to the req into the server
           const headers = ctx?.req?.headers;
           delete headers?.connection;
           return {
-            ...headers,
+            ...headers, // add our headers to the req into the server
             "x-ssr": "1", // req is done on the server
           };
         }
@@ -59,5 +57,5 @@ export default withTRPC<AppRouter>({
       transformer: superjson, // move functioning json
     };
   },
-  ssr: false,
+  ssr: false, // we want to see the requests on the network tab
 })(MyApp);
